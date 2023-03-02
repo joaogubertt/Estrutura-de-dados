@@ -51,7 +51,7 @@ bool inserirOrdemLista(lista &Lista, char valor)
     return true;
 }
 
-//Busca um char passado por parâmetro e retorna um valor booleano para mostrar ao usuário se determinado valor está no vetor. O valor retornado será o indice do resultado da busca em caso de existente
+//Busca um char passado por parâmetro, se determinado valor está no vetor o valor retornado será o indice do resultado da busca em caso de existente
 int buscarLista(lista Lista, char valor)
 {
     for(int i = 0; i<= Lista.ultimo; i++)
@@ -74,11 +74,67 @@ bool retirarLista(lista &Lista, char valor)
     return true;
 }
 
-//O problema da função acima é que por exemplo em uma array ['A', 'B', 'C', 'D'] para remover o C a lista ficaria assim: ['A', 'B', 'D', 'D'], fazendo uma "gambiarra" para mostrarLista rodar somente até ['A', 'B', 'D'] pois o valor de Lista.ulitmo foi diminuido na linha 73
+//O problema da função acima (e abaixo) é que por exemplo em uma array ['A', 'B', 'C', 'D'] para remover o C a lista ficaria assim: ['A', 'B', 'D', 'D'], fazendo uma "gambiarra" para mostrarLista rodar somente até ['A', 'B', 'D'] pois o valor de Lista.ulitmo foi diminuido na linha 73
+
+bool eliminarRedundancia(lista &Lista)
+{
+    if (Lista.ultimo == -1 || Lista.ultimo == 0) return false;
+
+    cout << endl;
+
+    for(int i = 0 ; i <= Lista.ultimo; i ++)
+    {
+        if(buscarLista(Lista, Lista.item[i]) != -1) //[A A A  C C] -> [A A C C A] -> [A A C A C] -> [A A A C C]
+        {
+            //alguns testes para encontrar no que estou errando.
+            //cout << buscarLista(Lista, Lista.item[i]) << "\t" << Lista.item[buscarLista(Lista, Lista.item[i])] << "\t" << Lista.ultimo << "\t";
+            retirarLista(Lista, Lista.item[i]);
+        }
+    }
+    //buscarLista retorna o indice do número repetido
+    return true;
+}
+
+
+lista concatena(lista Lista1, lista Lista2)
+{
+    lista listaConcatenada;
+
+    listaConcatenada.ultimo = Lista1.ultimo + Lista2.ultimo + 1;
+
+    if(listaConcatenada.ultimo > 48)
+    {
+        cout << endl << "O valor ultrapassa o limite de caracteres";
+        return listaConcatenada;
+    }
+    
+    for(int i = 0; i <= Lista1.ultimo; i++)
+        listaConcatenada.item[i] = Lista1.item[i];
+
+    //andar para frente a quantidade de casas do tamanho da lista 2 na lista 1 
+
+    int index = 0;
+    for(int i = ++Lista1.ultimo; i <= listaConcatenada.ultimo; i++)
+    {
+        listaConcatenada.item[i] = Lista2.item[index];
+        index++;
+    }
+
+    lista listaConcOrdem;
+
+    for(int i = 0; i <= listaConcatenada.ultimo; i++)
+    {
+        inserirOrdemLista(listaConcOrdem, listaConcatenada.item[i]);
+        cout << listaConcOrdem.item[0];
+    }
+
+    listaConcOrdem.ultimo = listaConcatenada.ultimo;
+    return listaConcOrdem;
+}
 
 int main()
 {
-    lista Lista1, Lista2;
+    lista Lista1, Lista2, Lista3, Lista4;
 
     inicialiarLista(Lista1);
 
@@ -91,7 +147,7 @@ int main()
     inserirFinalLista(Lista1, 'B');
     inserirFinalLista(Lista1, 'U');
     inserirFinalLista(Lista1, 'C');
-    inserirFinalLista(Lista1, '0');
+    inserirFinalLista(Lista1, 'O');
 
     mostrarLista(Lista1, "Lista 1");
 
@@ -113,6 +169,26 @@ int main()
         cout << "Nao existe " << letraBusca << " em Lista1";
     else
         cout << "Existe " << letraBusca << " em Lista1 no indice " << buscarLista(Lista1, letraBusca);
+
+    inicialiarLista(Lista3);
+
+    inserirFinalLista(Lista3, 'A');
+    inserirFinalLista(Lista3, 'A');
+    inserirFinalLista(Lista3, 'A');
+    inserirFinalLista(Lista3, 'C');
+    inserirFinalLista(Lista3, 'C');
+    cout << endl;
+    mostrarLista(Lista3, "Lista 3");
+    eliminarRedundancia(Lista3);
+    mostrarLista(Lista3, "Lista 3 - Redundancia aplicada");
+    
+    //Lista 4 será a soma da Lista 1 e 2
+
+    inicialiarLista(Lista4);
+    Lista4 = concatena(Lista1, Lista1);
+    cout << endl;
+    mostrarLista(Lista4, "Lista 4");
+    //FALTA CONCATENAR ORDENAR AS DUAS LISTAS;
 
     return 0;
 }
