@@ -1,6 +1,8 @@
 #include <iostream>
 #include<stdio.h>
 
+// O  próximo passo seria funções para deixar o código mais limpo e reutilizável.
+
 #define TAM 50
 using namespace std;
 
@@ -99,45 +101,31 @@ bool eliminarRedundancia(lista &Lista)
 lista concatena(lista Lista1, lista Lista2)
 {
     lista listaConcatenada;
-
-    listaConcatenada.ultimo = Lista1.ultimo + Lista2.ultimo + 1;
-
-    if(listaConcatenada.ultimo > 48)
+    inicialiarLista(listaConcatenada);
+    if(Lista1.ultimo + Lista2.ultimo > 49)
     {
-        cout << endl << "O valor ultrapassa o limite de caracteres";
+        cout << "Impossivel, tamanhos incompativeis";
         return listaConcatenada;
     }
-    
+
     for(int i = 0; i <= Lista1.ultimo; i++)
-        listaConcatenada.item[i] = Lista1.item[i];
-
-    //andar para frente a quantidade de casas do tamanho da lista 2 na lista 1 
-
-    int index = 0;
-    for(int i = ++Lista1.ultimo; i <= listaConcatenada.ultimo; i++)
     {
-        listaConcatenada.item[i] = Lista2.item[index];
-        index++;
+        inserirOrdemLista(listaConcatenada, Lista1.item[i]);
     }
-
-    lista listaConcOrdem;
-
-    for(int i = 0; i <= listaConcatenada.ultimo; i++)
+    for(int j = 0; j <=Lista2.ultimo; j++)
     {
-        inserirOrdemLista(listaConcOrdem, listaConcatenada.item[i]);
-        cout << listaConcOrdem.item[0];
+        inserirOrdemLista(listaConcatenada, Lista2.item[j]);
     }
+    
+    return listaConcatenada;
+}  
 
-    listaConcOrdem.ultimo = listaConcatenada.ultimo;
-    return listaConcOrdem;
-}
 
 int main()
 {
     lista Lista1, Lista2, Lista3, Lista4;
 
     inicialiarLista(Lista1);
-
     inserirFinalLista(Lista1, 'P');
     inserirFinalLista(Lista1, 'E');
     inserirFinalLista(Lista1, 'R');
@@ -154,24 +142,19 @@ int main()
     cout << endl;
 
     inicialiarLista(Lista2);
-
     inserirOrdemLista(Lista2, 'C');
     inserirOrdemLista(Lista2, 'A');
     inserirOrdemLista(Lista2, 'B');
-
     mostrarLista(Lista2, "Lista 2");
 
     char letraBusca = 'P';
-
     cout << endl;
-
     if(buscarLista(Lista1, letraBusca) == -1) 
         cout << "Nao existe " << letraBusca << " em Lista1";
     else
         cout << "Existe " << letraBusca << " em Lista1 no indice " << buscarLista(Lista1, letraBusca);
 
     inicialiarLista(Lista3);
-
     inserirFinalLista(Lista3, 'A');
     inserirFinalLista(Lista3, 'A');
     inserirFinalLista(Lista3, 'A');
@@ -182,13 +165,11 @@ int main()
     eliminarRedundancia(Lista3);
     mostrarLista(Lista3, "Lista 3 - Redundancia aplicada");
     
-    //Lista 4 será a soma da Lista 1 e 2
-
+    //Lista 4 será a soma da Lista 1 e 2 em ordem.
     inicialiarLista(Lista4);
-    Lista4 = concatena(Lista1, Lista1);
+    Lista4 = concatena(Lista1, Lista2);
     cout << endl;
     mostrarLista(Lista4, "Lista 4");
-    //FALTA CONCATENAR ORDENAR AS DUAS LISTAS;
 
     return 0;
 }
