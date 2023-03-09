@@ -55,7 +55,7 @@ bool inserirLUE(LUE &lista, char valor)
     }
 
     No *aux = lista.comeco;
-    while(aux->info < valor && aux->elo->info < valor) aux = aux->elo;
+    while(aux->info < valor && aux->elo->info < valor) aux = aux->elo; //ENQUANTO O NO e o ponteiro do NO TIVERem VALOR MENOR DO QUE O INSERIDO
     novo->elo = aux->elo;
     aux->elo = novo;
     return true;
@@ -76,6 +76,25 @@ void mostrarLUE(LUE lista, char frase[])
     return;
 }
 
+bool deletar(LUE &lista, char valor)
+{
+    if(lista.comeco->elo == NULL && lista.comeco->info == 'P') // somente um item na lista
+    {
+        lista.comeco = NULL;
+        lista.fim = NULL;
+        return true;
+    }
+
+    No* aux = lista.comeco;
+    while (aux->info < valor && aux->elo->info > valor)
+    {
+        cout << aux->info << " ";
+        aux = aux->elo;
+    }
+    //deletar um segundo item 
+
+    return true;
+}
 
 int main()
 {
@@ -84,7 +103,8 @@ int main()
     inicializarLUE(lista1);
 
     inserirLUE(lista1, 'P');
-    inserirLUE(lista1, 'E');
+    deletar(lista1, 'P');
+    /*inserirLUE(lista1, 'E');
     inserirLUE(lista1, 'R');
     inserirLUE(lista1, 'N');
     inserirLUE(lista1, 'A');
@@ -92,7 +112,7 @@ int main()
     inserirLUE(lista1, 'B');
     inserirLUE(lista1, 'U');
     inserirLUE(lista1, 'C');
-    inserirLUE(lista1, 'O');
+    inserirLUE(lista1, 'O');*/
     mostrarLUE(lista1, "Lista 1");
 
     return 0;
