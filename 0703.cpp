@@ -4,8 +4,8 @@ using namespace std;
 
 struct No
 {
-    char info; // info ser√° o valor armazenada no n√≥
-    No *elo; //elo ser√° o ponteiro do pr√≥ximo a apontar
+    char info; // info ser· o valor armazenada no nÛ
+    No *elo; //elo ser· o ponteiro do prÛximo a apontar
 };
 
 struct LUE
@@ -22,11 +22,11 @@ void inicializarLUE(LUE &lista)
 
 No* criarPonteiro(char valor)
 {
-    No* novo = new No; // Esse ponteiro ir√° armazenar o valor passado por par√¢metro 
-    cout << novo << "\t"; // dando cout no endere√ßo que o n√≥ vai ficar armazenado
-    if(novo == NULL) return novo; // se o ponteiro nao foi alocado nao acontecer√° nada na execu√ß√£o de tal execu√ß√£o
+    No* novo = new No; // Esse ponteiro ir· armazenar o valor passado por par‚metro
+    //cout << novo << "\t"; // dando cout no endereÁo que o nÛ vai ficar armazenado
+    if(novo == NULL) return novo; // se o ponteiro nao foi alocado nao acontecer· nada na execuÁ„o de tal execuÁ„o
     novo->info = valor;
-    novo->elo = NULL; // Por agora, o ponteiro n√£o apontar√° para nenhum outro n√≥
+    novo->elo = NULL; // Por agora, o ponteiro n„o apontar· para nenhum outro nÛ
     //cout << endl << novo->info; // CONFERINDO VALOR DE INFO DO PONTEIRO
     return novo;
 }
@@ -34,20 +34,20 @@ No* criarPonteiro(char valor)
 bool inserirLUE(LUE &lista, char valor)
 {
     No *novo = criarPonteiro(valor);
-    if(lista.comeco == NULL) // Insere em caso de lista sem n√≥s(vazia)
+    if(lista.comeco == NULL) // Insere em caso de lista sem nÛs(vazia)
     {
-        lista.comeco = novo;//lista come√ßo aponta para o nov n√≥
-        lista.fim = novo;//O fim tamb√©m
+        lista.comeco = novo;//lista comeÁo aponta para o nov nÛ
+        lista.fim = novo;//O fim tambÈm
         return true;
     }
 
-    if(valor < lista.comeco->info)//Inser√ß√£o no inicio
+    if(valor < lista.comeco->info)//InserÁ„o no inicio
     {
         novo->elo = lista.comeco; // O novo ponteiro do primeiro elemento da lista apontara para o antigo primeiro
         lista.comeco = novo; // agora o ponteiro de inicio de lista aponta para o novo valor inserido
         return true;
     }
-    if(valor > lista.fim->info) //Inser√ß√£o no fim
+    if(valor > lista.fim->info) //InserÁ„o no fim
     {
         lista.fim->elo = novo;
         lista.fim = novo;
@@ -67,7 +67,7 @@ void mostrarLUE(LUE lista, char frase[])
     if(lista.comeco == NULL) cout << "vazio";
 
     No *aux = lista.comeco;
-    while(aux != NULL) // VAI ANDAR AT√â O ELO SER NULL POIS AUX VAI TOMANDO VALORES A PARTIR DOS ELOS, OU SEJA, NO ULTIMO AUX ASSUME UM VALOR QUE NAO EXISTE
+    while(aux != NULL) // VAI ANDAR AT… O ELO SER NULL POIS AUX VAI TOMANDO VALORES A PARTIR DOS ELOS, OU SEJA, NO ULTIMO AUX ASSUME UM VALOR QUE NAO EXISTE
     {
         cout << aux->info << " ";
         aux = aux->elo;
@@ -76,23 +76,44 @@ void mostrarLUE(LUE lista, char frase[])
     return;
 }
 
-bool deletar(LUE &lista, char valor)
+No *buscarLUE(LUE &lista, char valor)
 {
-    if(lista.comeco->elo == NULL && lista.comeco->info == 'P') // somente um item na lista
-    {
-        lista.comeco = NULL;
-        lista.fim = NULL;
-        return true;
-    }
-
-    No* aux = lista.comeco;
+    No* aux;
     while (aux->info < valor && aux->elo->info > valor)
     {
-        cout << aux->info << " ";
+        if(aux->elo->info == valor) return aux->elo;
         aux = aux->elo;
     }
-    //deletar um segundo item 
 
+     return NULL;
+}
+
+
+bool deletar(LUE &lista, char valor)
+{
+    No* ant = NULL, *pos;
+    pos = lista.comeco;
+    while(pos!= NULL && pos->info != valor)
+    {
+        ant = pos;
+        pos = pos->elo;
+    }
+
+    if(pos == NULL) return false; // Em caso de lista vazia ou valor n„o encontrado
+
+    //retirada no caso do primeiro item da lista1
+    if( pos == lista.comeco)
+    {
+        lista.comeco = lista.comeco->elo;
+        if (pos == lista.fim) lista.fim = NULL;
+    }
+    else // No meio de dois nÛs
+    {
+        ant->elo = pos->elo;
+        if (pos == lista.fim) lista.fim = ant;
+    }
+
+    delete(pos);
     return true;
 }
 
@@ -103,8 +124,7 @@ int main()
     inicializarLUE(lista1);
 
     inserirLUE(lista1, 'P');
-    deletar(lista1, 'P');
-    /*inserirLUE(lista1, 'E');
+    inserirLUE(lista1, 'E');
     inserirLUE(lista1, 'R');
     inserirLUE(lista1, 'N');
     inserirLUE(lista1, 'A');
@@ -112,8 +132,20 @@ int main()
     inserirLUE(lista1, 'B');
     inserirLUE(lista1, 'U');
     inserirLUE(lista1, 'C');
-    inserirLUE(lista1, 'O');*/
+    inserirLUE(lista1, 'O');
+    deletar(lista1, 'E');
+    deletar(lista1, 'P');
+    deletar(lista1, 'R');
+    deletar(lista1, 'N');
+    deletar(lista1, 'A');
+    deletar(lista1, 'M');
+    deletar(lista1, 'B');
+    deletar(lista1, 'U');
+    deletar(lista1, 'C');
+    deletar(lista1, 'O');
+    cout
     mostrarLUE(lista1, "Lista 1");
+
 
     return 0;
 }
